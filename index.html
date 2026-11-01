@@ -688,7 +688,9 @@
   let lbList = [], lbIdx = 0, lbCaps = [];
   function showLb() {
     const it = lbList[lbIdx];
-    $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it); $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
+    $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it);
+    $('lbCap').textContent = lbCaps[lbIdx] || '';
+    $('lbCap').hidden = !lbCaps[lbIdx]; $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
   function openLightbox(list, i) { lbList = list; lbIdx = i; showLb(); $('lightbox').showModal(); }
   $('lbPrev').onclick = () => { lbIdx = (lbIdx - 1 + lbList.length) % lbList.length; showLb(); };
   $('lbNext').onclick = () => { lbIdx = (lbIdx + 1) % lbList.length; showLb(); };
