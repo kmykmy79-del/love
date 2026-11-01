@@ -388,8 +388,17 @@
     const n1 = settings.name1 || '치명적인 슬라임', n2 = settings.name2 || '아기찹쌀떡';
     $('coupleNames').innerHTML = `${esc(n1)} <b>♥</b> ${esc(n2)}`;
     const n = daysTogether(ymd(today));
-    $('dday').hidden = n == null;
-    if (n != null) $('dday').textContent = `D+${n.toLocaleString()}`;
+    $('dday').hidden = $('nextAnniv').hidden = n == null;
+    if (n == null) return;
+    $('dday').textContent = `D+${n.toLocaleString()}`;
+    if (n % 100 === 0) {
+      $('nextAnniv').textContent = `🎉 오늘 ${n}일!`;
+    } else {
+      const next = (Math.floor(n / 100) + 1) * 100;
+      const s = parseYmd(settings.start);
+      const d = new Date(s.getFullYear(), s.getMonth(), s.getDate() + next - 1);
+      $('nextAnniv').textContent = `💕 ${next}일 · ${d.getMonth() + 1}/${d.getDate()} (D-${next - n})`;
+    }
   }
 
   // ---------- Calendar ----------
