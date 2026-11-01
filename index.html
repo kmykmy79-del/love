@@ -63,6 +63,13 @@
 
   /* Admin lock */
   body:not(.is-admin) .admin-only { display: none !important; }
+  body:not(.can-delete) .file-only { display: none !important; }
+  .slide-del {
+    position: absolute; top: 20px; right: 20px; border: none; border-radius: 999px; padding: 6px 12px;
+    background: rgba(0,0,0,.55); color: #fff; font-size: .85rem;
+  }
+  .slide-del:hover { background: var(--sun); }
+  #lbDel { background: var(--sun) !important; color: #fff !important; }
   .pw-error { color: var(--sun); font-size: .85rem; min-height: 1.3em; margin: 2px 0 0; }
 
   /* Hero photo */
