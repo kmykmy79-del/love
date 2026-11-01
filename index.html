@@ -583,7 +583,9 @@
 
   $('prevBtn').onclick = () => { viewM--; if (viewM < 0) { viewM = 11; viewY--; } renderCalendar(); };
   $('nextBtn').onclick = () => { viewM++; if (viewM > 11) { viewM = 0; viewY++; } renderCalendar(); };
-  $('todayBtn').onclick = () => { viewY = today.getFullYear(); viewM = today.getMonth(); selected = ymd(today); render(); };
+  $('prevYearBtn').onclick = () => { viewY--; renderCalendar(); };
+  $('nextYearBtn').onclick = () => { viewY++; renderCalendar(); };
+  $('todayBtn').onclick =() => { viewY = today.getFullYear(); viewM = today.getMonth(); selected = ymd(today); render(); };
 
   // ---------- Entry editor ----------
   let editing = null;   // entry being edited, or null for new
