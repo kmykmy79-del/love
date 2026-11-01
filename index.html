@@ -543,11 +543,16 @@
     const list = entriesOn(selected);
     const mem = slidesOn(selected);
     const box = $('entryList');
-    box.innerHTML = mem.map((s, i) =>
-      `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}` +
-      `${s.with ? `<span class="with">👥 with ${esc(s.with)}</span>` : ''}</figcaption></figure>`).join('');
-    box.querySelectorAll('.memory img').forEach((img) =>
-      img.addEventListener('click', () => openLightbox(mem.map((s) => s.src), Number(img.dataset.i))));
+    // Up to 2 photos: full cards with captions. More: a thumbnail grid (captions show in the viewer).
+    box.innerHTML = mem.length > 2
+      ? `<div class="photos memory-grid">${mem.map((s, i) =>
+          `<img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}" loading="lazy">`).join('')}</div>` +
+        `<p class="hint">📷 사진 ${mem.length}장 · 눌러서 크게 보기</p>`
+      : mem.map((s, i) =>
+          `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}` +
+          `${s.with ? `<span class="with">👥 with ${esc(s.with)}</span>` : ''}</figcaption></figure>`).join('');
+    box.querySelectorAll('.memory img, .memory-grid img').forEach((img) =>
+      img.addEventListener('click', () => openLightbox(mem.map((s) => s.src), Number(img.dataset.i), mem.map((s) => s.caption))));
     if (!list.length) {
       if (!mem.length) box.innerHTML = `<div class="empty">아직 기록이 없어요.${isAdmin ? '<br>‘+ 추가’를 눌러 일정이나 데이트를 남겨보세요 ✍️' : ''}</div>`;
       return;
