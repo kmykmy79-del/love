@@ -806,9 +806,46 @@
     $('slideDots').innerHTML = SLIDES.map((_, i) => `<button type="button" aria-label="${i + 1}번째 사진"></button>`).join('');
     $('slideDots').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => { showSlide(i); startSlides(); }));
     $('slidePrev').hidden = $('slideNext').hidden = $('slideDots').hidden = SLIDES.length < 2;
-    showSlide(0);
+    showSlide(Math.min(slideIdx, SLIDES.length - 1));
     startSlides();
   }
+
+  // ---------- Photo delete (only via the local diary server, admin mode) ----------
+  async function checkLocalServer() {
+    if (!['localhost', '127.0.0.1'].includes(location.hostname)) return;
+    try {
+      const res = await fetch('/api/status', { cache: 'no-store' });
+      const out = res.ok && await res.json();
+      document.body.classList.toggle('can-delete', !!(out && out.ok));
+    } catch {}
+  }
+  async function deletePhoto(src) {
+    if (!confirm('이 사진을 삭제할까요?\n컴퓨터의 images 폴더에서도 지워지고 GitHub에도 반영돼요.')) return false;
+    try {
+      const res = await fetch('/api/photos/delete', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ src }),
+      });
+      const out = await res.json().catch(() => ({}));
+      if (!res.ok || !out.ok) throw new Error(out.error || `HTTP ${res.status}`);
+      SLIDES = SLIDES.filter((s) => s.src !== src);
+      buildSlides();
+      render();
+      if (!out.pushed) alert('사진은 삭제했지만 GitHub에는 올리지 못했어요.\n' + (out.error || ''));
+      return true;
+    } catch (err) {
+      alert('사진을 삭제하지 못했어요: ' + err.message);
+      return false;
+    }
+  }
+  $('slideDel').onclick = () => { if (SLIDES[slideIdx]) deletePhoto(SLIDES[slideIdx].src); };
+  $('lbDel').onclick = async () => {
+    if (!(await deletePhoto(lbList[lbIdx]))) return;
+    lbList.splice(lbIdx, 1);
+    lbCaps.splice(lbIdx, 1);
+    if (!lbList.length) return $('lightbox').close();
+    lbIdx %= lbList.length;
+    showLb();
+  };
   $('slidePrev').onclick = () => { showSlide(slideIdx - 1); startSlides(); };
   $('slideNext').onclick = () => { showSlide(slideIdx + 1); startSlides(); };
   $('hero').addEventListener('mouseenter', () => clearInterval(slideTimer));
