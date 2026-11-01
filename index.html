@@ -608,6 +608,7 @@
 
   // ---------- Settings + backup ----------
   $('settingsBtn').onclick = () => {
+    if (!isAdmin) return;
     $('sName1').value = settings.name1 || '';
     $('sName2').value = settings.name2 || '';
     $('sStart').value = settings.start || '';
