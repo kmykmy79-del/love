@@ -916,9 +916,9 @@
     document.body.classList.toggle('is-admin', isAdmin);
     $('adminBtn').textContent = isAdmin ? '🔓 관리자 모드' : '🔒 관리자';
   }
-  $('adminBtn').onclick = () => {
+  $('adminBtn').onclick = async () => {
     if (isAdmin) {
-      if (!confirm('관리자 모드를 끌까요?')) return;
+      if (!(await askConfirm('관리자 모드를 끌까요?', '끄기'))) return;
       isAdmin = false;
       try { sessionStorage.removeItem(ADMIN_KEY); } catch {}
       applyAdmin();
