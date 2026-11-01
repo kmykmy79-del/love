@@ -441,8 +441,16 @@
     if (!urlCache.has(blob)) urlCache.set(blob, URL.createObjectURL(blob));
     return urlCache.get(blob);
   }
+  // Shared entries (data/entries.json, added by Claude) plus any older ones saved in this browser.
+  let sharedEntries = [];
+  async function loadSharedEntries() {
+    try {
+      const res = await fetch('data/entries.json', { cache: 'no-store' });
+      if (res.ok) sharedEntries = (await res.json()).map((e) => ({ ...e, shared: true }));
+    } catch {}
+  }
   function entriesOn(date) {
-    return entries.filter((e) => e.date === date).sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
+    return entries.concat(sharedEntries).filter((e) => e.date === date).sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
   }
   const slidesOn = (date) => SLIDES.filter((s) => s.date === date);
   // Yearly birthdays (MM-DD); names follow the couple names in settings.
