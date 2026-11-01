@@ -661,17 +661,6 @@
   }
   $('entryForm').querySelectorAll('input[name=type]').forEach((r) => r.addEventListener('change', syncTypeUI));
 
-  function renderDraftThumbs() {
-    $('fThumbs').innerHTML = '';
-    draftPhotos.forEach((ph, i) => {
-      const t = document.createElement('div');
-      t.className = 'thumb';
-      t.innerHTML = `<img src="${blobUrl(ph)}" alt=""><button type="button" aria-label="사진 빼기">✕</button>`;
-      t.querySelector('button').onclick = () => { draftPhotos.splice(i, 1); renderDraftThumbs(); };
-      $('fThumbs').appendChild(t);
-    });
-  }
-
   function openEditor(entry, date) {
     if (!isAdmin) return;
     editing = entry || null;
