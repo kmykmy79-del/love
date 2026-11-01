@@ -850,7 +850,7 @@
     $('slides').innerHTML = SLIDES.map((s) => {
       const caption = photoCaption(s);
       // Images load lazily in showSlide() so the page doesn't fetch every photo up front.
-      return `<div class="slide" data-src="${esc(encodeURI(s.src))}"><div class="bg"></div><img alt="${esc(caption)}">` +
+      return `<div class="slide" data-src="${esc(encodeURI(s.src))}"${s.date ? ' title="눌러서 이 날짜로 이동"' : ''}><div class="bg"></div><img alt="${esc(caption)}">` +
         `<p class="caption">${esc(caption)}${s.with ? `<span class="with">👥 with ${esc(s.with)}</span>` : ''}</p></div>`;
     }).join('');
     $('slideDots').innerHTML = SLIDES.map((_, i) => `<button type="button" aria-label="${i + 1}번째 사진"></button>`).join('');
