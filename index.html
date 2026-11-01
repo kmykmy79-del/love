@@ -685,7 +685,7 @@
   });
 
   // ---------- Lightbox ----------
-  let lbList = [], lbIdx = 0;
+  let lbList = [], lbIdx = 0, lbCaps = [];
   function showLb() {
     const it = lbList[lbIdx];
     $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it); $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
