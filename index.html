@@ -373,6 +373,17 @@
   </form>
 </dialog>
 
+<!-- In-page confirm / message (browser pop-ups are blocked inside previews) -->
+<dialog id="msgDlg">
+  <form class="dlg" method="dialog">
+    <p id="msgText" style="white-space:pre-wrap;margin:0 0 16px"></p>
+    <div class="dlg-actions">
+      <button value="cancel" class="btn ghost" id="msgCancel">취소</button>
+      <button value="ok" class="btn" id="msgOk">확인</button>
+    </div>
+  </form>
+</dialog>
+
 <!-- Photo viewer -->
 <dialog id="lightbox">
   <img id="lbImg" alt="">
