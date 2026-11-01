@@ -485,7 +485,7 @@
           <a href="https://map.naver.com/p/search/${encodeURIComponent(where)}" target="_blank" rel="noopener">지도 보기 ↗</a></p>` : ''}
         ${e.memo ? `<p class="memo">${esc(e.memo)}</p>` : ''}
         ${e.photos?.length ? `<div class="photos">${e.photos.map((ph, i) => `<img src="${blobUrl(ph)}" data-i="${i}" alt="사진 ${i + 1}" loading="lazy">`).join('')}</div>` : ''}
-        <div class="entry-actions">
+        <div class="entry-actions admin-only">
           <button type="button" class="btn ghost" data-act="edit">수정</button>
           <button type="button" class="btn danger" data-act="del">삭제</button>
         </div>`;
