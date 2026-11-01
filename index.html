@@ -771,8 +771,17 @@
   const SLIDE_MS = 4000;
   const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
   let slideIdx = 0, slideTimer = null;
+  function loadSlide(k) {
+    const s = $('slides').children[k];
+    if (!s || s.dataset.loaded) return;
+    s.dataset.loaded = '1';
+    s.querySelector('img').src = s.dataset.src;
+    s.querySelector('.bg').style.backgroundImage = `url('${s.dataset.src}')`;
+  }
   function showSlide(i) {
     slideIdx = (i + SLIDES.length) % SLIDES.length;
+    loadSlide(slideIdx);
+    loadSlide((slideIdx + 1) % SLIDES.length);
     $('slides').querySelectorAll('.slide').forEach((s, k) => s.classList.toggle('active', k === slideIdx));
     $('slideDots').querySelectorAll('button').forEach((d, k) => d.setAttribute('aria-current', k === slideIdx));
   }
