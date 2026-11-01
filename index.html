@@ -779,7 +779,7 @@
     const downloads = window.claude?.use ? await window.claude.use('downloads') : null;
     if (downloads) {
       try { await downloads.save({ filename, data: blob }); }
-      catch (err) { if (err?.code !== 'declined') alert('백업 파일을 저장하지 못했어요: ' + (err?.message || err)); }
+      catch (err) { if (err?.code !== 'declined') notify('백업 파일을 저장하지 못했어요: ' + (err?.message || err)); }
       return;
     }
     const a = document.createElement('a');
