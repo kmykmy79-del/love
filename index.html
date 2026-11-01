@@ -602,16 +602,22 @@
         ${e.memo ? `<p class="memo">${esc(e.memo)}</p>` : ''}
         ${e.photos?.length ? `<div class="photos">${e.photos.map((ph, i) => `<img src="${blobUrl(ph)}" data-i="${i}" alt="사진 ${i + 1}" loading="lazy">`).join('')}</div>` : ''}
         <div class="entry-actions admin-only">
-          <button type="button" class="btn ghost" data-act="edit">수정</button>
-          <button type="button" class="btn danger" data-act="del">삭제</button>
+          ${e.shared ? '<button type="button" class="btn ghost" data-act="edit">수정 요청</button>' : ''}
+          <button type="button" class="btn danger" data-act="del">${e.shared ? '삭제 요청' : '삭제'}</button>
         </div>`;
-      el.querySelector('[data-act=edit]').addEventListener('click', () => openEditor(e));
-      el.querySelector('[data-act=del]').addEventListener('click', async () => {
-        if (!confirm(`‘${e.title}’ 기록을 삭제할까요? 사진도 함께 삭제돼요.`)) return;
-        await dbDel(e.id);
-        entries = entries.filter((x) => x.id !== e.id);
-        render();
-      });
+      if (e.shared) {
+        el.querySelector('[data-act=edit]').addEventListener('click', () => openEditor(e));
+        el.querySelector('[data-act=del]').addEventListener('click', () =>
+          askClaude(['[커플 다이어리] 기록 삭제 요청', `날짜: ${e.date}`, `제목: ${e.title}`, `id: ${e.id}`].join('\n')));
+      } else {
+        // Older entry kept only in this browser.
+        el.querySelector('[data-act=del]').addEventListener('click', async () => {
+          if (!confirm(`‘${e.title}’ 기록을 삭제할까요? 사진도 함께 삭제돼요.`)) return;
+          await dbDel(e.id);
+          entries = entries.filter((x) => x.id !== e.id);
+          render();
+        });
+      }
       el.querySelectorAll('.photos img').forEach((img) =>
         img.addEventListener('click', () => openLightbox(e.photos, Number(img.dataset.i))));
       box.appendChild(el);
