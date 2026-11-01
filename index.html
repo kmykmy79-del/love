@@ -229,7 +229,19 @@
   #lightbox .lb-bar button { background: rgba(255,255,255,.9); color: #333; border: none; border-radius: 999px; padding: 6px 14px; }
 </style>
 </head>
-<body>
+<body class="locked">
+<div class="gate" id="gate">
+  <form class="gate-card" id="gateForm">
+    <img class="gate-pic" src="images/20260717/KakaoTalk_261101_154412_21.jpg" alt="치명적인 슬라임과 아기찹쌀떡" onerror="this.remove()">
+    <h1>💕 우리의 다이어리</h1>
+    <p class="gate-sub">치명적인 슬라임 <b>♥</b> 아기찹쌀떡</p>
+    <p class="gate-msg">우리 둘만 들어올 수 있어요</p>
+    <input type="password" id="gatePw" inputmode="numeric" autocomplete="current-password" placeholder="비밀번호" aria-label="비밀번호" required>
+    <p class="pw-error" id="gateErr" role="alert"></p>
+    <label class="gate-keep"><input type="checkbox" id="gateKeep" checked> 이 기기에서 로그인 유지</label>
+    <button class="btn gate-btn" type="submit">입장하기 🔑</button>
+  </form>
+</div>
 <div class="wrap">
   <header>
     <div class="brand">
