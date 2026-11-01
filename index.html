@@ -524,7 +524,8 @@
     const mem = slidesOn(selected);
     const box = $('entryList');
     box.innerHTML = mem.map((s, i) =>
-      `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}</figcaption></figure>`).join('');
+      `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}` +
+      `${s.with ? `<span class="with">👥 with ${esc(s.with)}</span>` : ''}</figcaption></figure>`).join('');
     box.querySelectorAll('.memory img').forEach((img) =>
       img.addEventListener('click', () => openLightbox(mem.map((s) => s.src), Number(img.dataset.i))));
     if (!list.length) {
