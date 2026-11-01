@@ -416,6 +416,12 @@
     return entries.filter((e) => e.date === date).sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
   }
   const slidesOn = (date) => SLIDES.filter((s) => s.date === date);
+  // Yearly birthdays (MM-DD); names follow the couple names in settings.
+  const BIRTHDAYS = [
+    { md: '10-23', who: () => settings.name1 || '치명적인 슬라임' },
+    { md: '05-27', who: () => settings.name2 || '아기찹쌀떡' },
+  ];
+  const birthdaysOn = (date) => BIRTHDAYS.filter((b) => date.slice(5) === b.md).map((b) => b.who());
   function daysTogether(date) {
     if (!settings.start) return null;
     const diff = Math.round((parseYmd(date) - parseYmd(settings.start)) / 86400000);
