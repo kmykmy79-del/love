@@ -832,6 +832,8 @@
       const res = await fetch('/api/status', { cache: 'no-store' });
       const out = res.ok && await res.json();
       document.body.classList.toggle('can-delete', !!(out && out.ok));
+      // Pick up photos added to / moved between date folders since the last sync.
+      if (out && out.ok) await fetch('/api/photos/sync', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: '{}' });
     } catch {}
   }
   async function deletePhoto(src) {
