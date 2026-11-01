@@ -307,17 +307,25 @@
       <div class="field"><label for="fAddress">주소 (선택)</label><input type="text" id="fAddress" maxlength="120" placeholder="예: 서울 영등포구 여의동로 330"></div>
     </div>
     <div class="field"><label for="fMemo">메모</label><textarea id="fMemo" rows="4" placeholder="오늘 있었던 일, 먹은 것, 하고 싶은 말…"></textarea></div>
-    <div class="field">
-      <span class="lbl">사진</span>
-      <label class="upload" for="fPhotos">📷 사진 선택 (여러 장 가능)</label>
-      <input type="file" id="fPhotos" accept="image/*" multiple hidden>
-      <div class="thumbs" id="fThumbs"></div>
-    </div>
+    <p class="hint">📷 사진은 <b>images</b> 폴더 안 날짜 폴더(예: images/20260711)에 넣어 주세요.</p>
     <div class="dlg-actions">
       <button type="button" class="btn ghost" id="cancelEntry">취소</button>
-      <button type="submit" class="btn" id="saveEntry">저장</button>
+      <button type="submit" class="btn" id="saveEntry">🤖 Claude에게 부탁하기</button>
     </div>
   </form>
+</dialog>
+
+<!-- Request for Claude (the diary has no database; Claude adds entries to data/entries.json) -->
+<dialog id="askDlg">
+  <div class="dlg">
+    <h3>🤖 Claude에게 부탁하기</h3>
+    <p class="hint" id="askHint">아래 내용을 복사했어요. Claude 채팅창에 붙여넣으면 다이어리에 반영해 드려요.</p>
+    <div class="field"><textarea id="askText" rows="10" readonly></textarea></div>
+    <div class="dlg-actions">
+      <button type="button" class="btn ghost" id="askClose">닫기</button>
+      <button type="button" class="btn" id="askCopy">📋 복사하기</button>
+    </div>
+  </div>
 </dialog>
 
 <!-- Settings -->
