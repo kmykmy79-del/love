@@ -530,6 +530,7 @@
   }
 
   function openEditor(entry, date) {
+    if (!isAdmin) return;
     editing = entry || null;
     const f = $('entryForm');
     $('entryDlgTitle').textContent = entry ? '기록 수정' : '기록 추가';
