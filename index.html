@@ -543,7 +543,7 @@
       btn.innerHTML =
         `<span class="num">${d.getDate()}</span>` +
         (ann ? `<span class="chip anniv">💕 ${ann}</span>` : '') +
-        bdays.map((n) => `<span class="chip anniv">🎂 ${esc(n)} 생일</span>`).join('') +
+        yearly.map((y) => `<span class="chip anniv">${y.emoji} ${esc(y.text())}</span>`).join('') +
         (memories.length ? `<span class="chip photo">📷 사진</span>` : '') +
         shown.map((e) => `<span class="chip ${e.type === 'date' ? 'date' : ''}">${esc(e.title)}</span>`).join('') +
         (list.length > 2 ? `<span class="more">+${list.length - 2}개 더</span>` : '');
