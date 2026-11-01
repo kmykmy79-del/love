@@ -814,23 +814,65 @@
   const blobToDataUrl = (b) => new Promise((res) => { const r = new FileReader(); r.onload = () => res(r.result); r.readAsDataURL(b); });
   const dataUrlToBlob = (u) => fetch(u).then((r) => r.blob());
 
-  $('exportBtn').onclick = async () => {
-    const out = [];
-    for (const e of entries) out.push({ ...e, photos: await Promise.all((e.photos || []).map(blobToDataUrl)) });
-    const blob = new Blob([JSON.stringify({ version: 1, settings, entries: out })], { type: 'application/json' });
-    const filename = `couple-diary-${ymd(new Date())}.json`;
-    // Inside the claude.ai viewer, downloads go through the platform; elsewhere a plain link works.
+  // Inside the claude.ai viewer, downloads go through the platform; elsewhere a plain link works.
+  async function saveFile(filename, blob) {
     const downloads = window.claude?.use ? await window.claude.use('downloads') : null;
-    if (downloads) {
-      try { await downloads.save({ filename, data: blob }); }
-      catch (err) { if (err?.code !== 'declined') notify('백업 파일을 저장하지 못했어요: ' + (err?.message || err)); }
-      return;
-    }
+    if (downloads) return downloads.save({ filename, data: blob });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = filename;
     a.click();
     setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+  }
+
+  $('exportBtn').onclick = async () => {
+    const out = [];
+    for (const e of entries) out.push({ ...e, photos: await Promise.all((e.photos || []).map(blobToDataUrl)) });
+    const blob = new Blob([JSON.stringify({ version: 1, settings, entries: out })], { type: 'application/json' });
+    try { await saveFile(`couple-diary-${ymd(new Date())}.json`, blob); }
+    catch (err) { if (err?.code !== 'declined') notify('백업 파일을 저장하지 못했어요: ' + (err?.message || err)); }
+  };
+
+  // ---------- Download every photo as one ZIP, keeping the images/YYYYMMDD/ folders ----------
+  function loadJSZip() {
+    if (window.JSZip) return Promise.resolve(window.JSZip);
+    return new Promise((resolve, reject) => {
+      const s = document.createElement('script');
+      s.src = 'https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js';
+      s.onload = () => resolve(window.JSZip);
+      s.onerror = () => reject(new Error('압축 도구를 불러오지 못했어요.'));
+      document.head.appendChild(s);
+    });
+  }
+  $('zipBtn').onclick = async () => {
+    const btn = $('zipBtn');
+    if (btn.disabled) return;
+    if (!SLIDES.length) return notify('내려받을 사진이 없어요.');
+    const label = btn.textContent;
+    btn.disabled = true;
+    try {
+      const JSZip = await loadJSZip();
+      const zip = new JSZip();
+      zip.file('images/photos.json', JSON.stringify(SLIDES, null, 2)); // dates, captions, "with"
+      const failed = [];
+      for (const [i, s] of SLIDES.entries()) {
+        btn.textContent = `📥 ${i + 1}/${SLIDES.length}`;
+        try {
+          const res = await fetch(encodeURI(s.src));
+          if (!res.ok) throw new Error(res.status);
+          zip.file(s.src, await res.blob()); // same path as on the site: images/YYYYMMDD/name.jpg
+        } catch { failed.push(s.src); }
+      }
+      btn.textContent = '📥 압축 중…';
+      const blob = await zip.generateAsync({ type: 'blob' }); // JPEGs are already compressed, so files are stored as-is
+      await saveFile(`couple-diary-photos-${ymd(new Date())}.zip`, blob);
+      if (failed.length) notify(`사진 ${failed.length}장은 받지 못했어요.\n${failed.join('\n')}`);
+    } catch (err) {
+      if (err?.code !== 'declined') notify('사진을 내려받지 못했어요: ' + (err?.message || err));
+    } finally {
+      btn.disabled = false;
+      btn.textContent = label;
+    }
   };
   $('importBtn').onclick = () => $('importFile').click();
   $('importFile').addEventListener('change', async (ev) => {
