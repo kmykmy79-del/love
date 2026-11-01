@@ -562,7 +562,7 @@
           `<img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(photoCaption(s))}" loading="lazy">`).join('')}</div>` +
         `<p class="hint">📷 사진 ${mem.length}장 · 눌러서 크게 보기</p>`
       : mem.map((s, i) =>
-          `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}` +
+          `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(photoCaption(s))}"><figcaption>${esc(photoCaption(s))}` +
           `${s.with ? `<span class="with">👥 with ${esc(s.with)}</span>` : ''}</figcaption></figure>`).join('');
     box.querySelectorAll('.memory img, .memory-grid img').forEach((img) =>
       img.addEventListener('click', () => openLightbox(mem.map((s) => s.src), Number(img.dataset.i), mem.map((s) => s.caption), true)));
