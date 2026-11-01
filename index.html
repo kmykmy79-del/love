@@ -633,8 +633,27 @@
   $('todayBtn').onclick =() => { viewY = today.getFullYear(); viewM = today.getMonth(); selected = ymd(today); render(); };
 
   // ---------- Entry editor ----------
-  let editing = null;   // entry being edited, or null for new
-  let draftPhotos = []; // Blob[]
+  // There is no database: the form builds a request that the user pastes to Claude,
+  // who adds it to data/entries.json and pushes the site.
+  let editing = null;   // shared entry being edited, or null for new
+
+  function askClaude(text) {
+    $('askText').value = text;
+    $('askHint').textContent = '아래 내용을 Claude 채팅창에 붙여넣으면 다이어리에 반영해 드려요.';
+    $('askDlg').showModal();
+    copyAsk();
+  }
+  async function copyAsk() {
+    try {
+      await navigator.clipboard.writeText($('askText').value);
+      $('askHint').textContent = '✅ 복사했어요! Claude 채팅창에 붙여넣으면 다이어리에 반영해 드려요.';
+    } catch {
+      $('askText').select();
+      $('askHint').textContent = '내용을 선택해 두었어요. Ctrl+C로 복사해서 Claude 채팅창에 붙여넣어 주세요.';
+    }
+  }
+  $('askCopy').onclick = copyAsk;
+  $('askClose').onclick = () => $('askDlg').close();
 
   function syncTypeUI() {
     const isDate = $('entryForm').type.value === 'date';
