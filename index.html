@@ -782,8 +782,8 @@
   }
   function buildSlides() {
     $('slides').innerHTML = SLIDES.map(({ src, caption, with: people }) => {
-      const u = encodeURI(src);
-      return `<div class="slide"><div class="bg" style="background-image:url('${u}')"></div><img src="${u}" alt="${esc(caption)}">` +
+      // Images load lazily in showSlide() so the page doesn't fetch every photo up front.
+      return `<div class="slide" data-src="${esc(encodeURI(src))}"><div class="bg"></div><img alt="${esc(caption)}">` +
         `<p class="caption">${esc(caption)}${people ? `<span class="with">👥 with ${esc(people)}</span>` : ''}</p></div>`;
     }).join('');
     $('slideDots').innerHTML = SLIDES.map((_, i) => `<button type="button" aria-label="${i + 1}번째 사진"></button>`).join('');
