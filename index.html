@@ -897,7 +897,8 @@
   applyAdmin();
 
   // ---------- Boot ----------
-  openDB()
+  Promise.all([loadSlidesData(), checkLocalServer()])
+    .then(() => openDB())
     .then(async (d) => { db = d; entries = await dbAll(); render(); })
     .catch((err) => {
       render();
