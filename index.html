@@ -682,47 +682,27 @@
   $('addBtn').onclick = () => openEditor(null, selected);
   $('cancelEntry').onclick = () => $('entryDlg').close();
 
-  $('fPhotos').addEventListener('change', async (ev) => {
-    const files = [...ev.target.files];
-    ev.target.value = '';
-    $('saveEntry').disabled = true;
-    for (const file of files) {
-      try { draftPhotos.push(await resizeImage(file)); } catch { alert(`‘${file.name}’ 사진을 읽지 못했어요.`); }
-      renderDraftThumbs();
-    }
-    $('saveEntry').disabled = false;
-  });
-
-  $('entryForm').addEventListener('submit', async (ev) => {
+  $('entryForm').addEventListener('submit', (ev) => {
     ev.preventDefault();
     const f = ev.target;
     const isDate = f.type.value === 'date';
-    const entry = {
-      id: editing?.id || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now() + Math.random())),
-      createdAt: editing?.createdAt || Date.now(),
-      type: f.type.value,
-      date: $('fDate').value,
-      time: $('fTime').value,
-      title: $('fTitle').value.trim(),
-      with: $('fWith').value.split(',').map((s) => s.trim()).filter(Boolean).join(', '),
-      place: isDate ? $('fPlace').value.trim() : '',
-      address: isDate ? $('fAddress').value.trim() : '',
-      memo: $('fMemo').value.trim(),
-      photos: draftPhotos,
-    };
-    if (!entry.title || !entry.date) return;
-    try {
-      await dbPut(entry);
-    } catch (err) {
-      alert('저장하지 못했어요. 브라우저 저장 공간이 부족할 수 있어요.\n' + err);
-      return;
-    }
-    entries = entries.filter((x) => x.id !== entry.id).concat(entry);
-    selected = entry.date;
-    const d = parseYmd(entry.date);
-    viewY = d.getFullYear(); viewM = d.getMonth();
+    const date = $('fDate').value, title = $('fTitle').value.trim();
+    if (!title || !date) return;
+    const people = $('fWith').value.split(',').map((s) => s.trim()).filter(Boolean).join(', ');
+    const lines = [
+      editing ? '[커플 다이어리] 기록 수정 요청' : '[커플 다이어리] 기록 추가 요청',
+      editing && `수정할 기록: ${editing.date} ‘${editing.title}’ (id: ${editing.id})`,
+      `날짜: ${date} (${DOW[parseYmd(date).getDay()]})`,
+      `종류: ${isDate ? '데이트' : '일정'}`,
+      $('fTime').value && `시간: ${$('fTime').value}`,
+      `제목: ${title}`,
+      isDate && $('fPlace').value.trim() && `장소: ${$('fPlace').value.trim()}`,
+      isDate && $('fAddress').value.trim() && `주소: ${$('fAddress').value.trim()}`,
+      people && `함께한 사람: ${people}`,
+      $('fMemo').value.trim() && `메모: ${$('fMemo').value.trim()}`,
+    ].filter(Boolean);
     $('entryDlg').close();
-    render();
+    askClaude(lines.join('\n'));
   });
 
   // ---------- Lightbox ----------
