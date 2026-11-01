@@ -872,7 +872,7 @@
     } catch {}
   }
   async function deletePhoto(src) {
-    if (!confirm('이 사진을 삭제할까요?\n컴퓨터의 images 폴더에서도 지워지고 GitHub에도 반영돼요.')) return false;
+    if (!(await askConfirm('이 사진을 삭제할까요?\n컴퓨터의 images 폴더에서도 지워지고 GitHub에도 반영돼요.', '삭제'))) return false;
     try {
       const res = await fetch('/api/photos/delete', {
         method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ src }),
