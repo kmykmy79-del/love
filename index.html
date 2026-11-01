@@ -457,7 +457,7 @@
     const ann = anniversary(selected);
     const n = daysTogether(selected);
     $('panelAnniv').innerHTML = ann
-      ? `<p class="hint" style="color:var(--accent);font-weight:700">💕 오늘은 우리의 ${ann}이에요!</p>`
+      ? `<p class="hint" style="color:var(--accent);font-weight:700">💕 ${selected === ymd(today) ? '오늘은' : '이날은'} 우리의 ${ann}이에요!</p>`
       : n ? `<p class="hint">함께한 지 ${n.toLocaleString()}일째</p>` : '';
     const list = entriesOn(selected);
     const box = $('entryList');
