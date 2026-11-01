@@ -568,8 +568,8 @@
     $('panelAnniv').innerHTML = (ann
       ? `<p class="hint" style="color:var(--accent);font-weight:700">💕 ${when} 우리의 ${ann}이에요!</p>`
       : n ? `<p class="hint">함께한 지 ${n.toLocaleString()}일째</p>` : '') +
-      birthdaysOn(selected).map((who) =>
-        `<p class="hint" style="color:var(--accent);font-weight:700">🎂 ${when} ${esc(who)} 생일이에요!</p>`).join('');
+      yearlyOn(selected).map((y) =>
+        `<p class="hint" style="color:var(--accent);font-weight:700">${y.emoji} ${when} ${esc(y.text())}이에요!</p>`).join('');
     const list = entriesOn(selected);
     const mem = slidesOn(selected);
     const box = $('entryList');
