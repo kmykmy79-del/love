@@ -667,6 +667,43 @@
     }
   });
 
+  // ---------- Admin lock (password = first-met day, e.g. 20260704) ----------
+  function applyAdmin() {
+    document.body.classList.toggle('is-admin', isAdmin);
+    $('adminBtn').textContent = isAdmin ? '🔓 관리자 모드' : '🔒 관리자';
+  }
+  $('adminBtn').onclick = () => {
+    if (isAdmin) {
+      if (!confirm('관리자 모드를 끌까요?')) return;
+      isAdmin = false;
+      try { sessionStorage.removeItem(ADMIN_KEY); } catch {}
+      applyAdmin();
+      renderPanel();
+      return;
+    }
+    $('adminPw').value = '';
+    $('adminErr').textContent = '';
+    $('adminDlg').showModal();
+    $('adminPw').focus();
+  };
+  $('cancelAdmin').onclick = () => $('adminDlg').close();
+  $('adminForm').addEventListener('submit', (ev) => {
+    ev.preventDefault();
+    const typed = $('adminPw').value.replace(/\D/g, '');
+    const pw = (settings.start || DEFAULT_START).replace(/-/g, '');
+    if (typed === pw || typed === pw.slice(2)) {
+      isAdmin = true;
+      try { sessionStorage.setItem(ADMIN_KEY, '1'); } catch {}
+      applyAdmin();
+      $('adminDlg').close();
+      renderPanel();
+    } else {
+      $('adminErr').textContent = '비밀번호가 달라요. 힌트를 확인해 보세요.';
+      $('adminPw').select();
+    }
+  });
+  applyAdmin();
+
   // ---------- Boot ----------
   openDB()
     .then(async (d) => { db = d; entries = await dbAll(); render(); })
