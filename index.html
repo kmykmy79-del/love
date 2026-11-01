@@ -320,8 +320,12 @@
   const dbDel = (id) => p(store('readwrite').delete(id));
 
   const SETTINGS_KEY = 'couple-diary-settings';
+  const DEFAULT_START = '2026-07-04'; // 처음 만난 날
   function loadSettings() {
-    try { return JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch { return {}; }
+    let s = {};
+    try { s = JSON.parse(localStorage.getItem(SETTINGS_KEY)) || {}; } catch {}
+    if (!s.start) s.start = DEFAULT_START;
+    return s;
   }
   function saveSettings(s) {
     try { localStorage.setItem(SETTINGS_KEY, JSON.stringify(s)); } catch {}
