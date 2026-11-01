@@ -639,7 +639,7 @@
       } else {
         // Older entry kept only in this browser.
         el.querySelector('[data-act=del]').addEventListener('click', async () => {
-          if (!confirm(`‘${e.title}’ 기록을 삭제할까요? 사진도 함께 삭제돼요.`)) return;
+          if (!(await askConfirm(`‘${e.title}’ 기록을 삭제할까요? 사진도 함께 삭제돼요.`, '삭제'))) return;
           await dbDel(e.id);
           entries = entries.filter((x) => x.id !== e.id);
           render();
