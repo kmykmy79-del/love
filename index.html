@@ -634,6 +634,7 @@
       date: $('fDate').value,
       time: $('fTime').value,
       title: $('fTitle').value.trim(),
+      with: $('fWith').value.split(',').map((s) => s.trim()).filter(Boolean).join(', '),
       place: isDate ? $('fPlace').value.trim() : '',
       address: isDate ? $('fAddress').value.trim() : '',
       memo: $('fMemo').value.trim(),
