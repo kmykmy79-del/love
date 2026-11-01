@@ -796,6 +796,8 @@
     if (!reduceMotion && SLIDES.length > 1) slideTimer = setInterval(() => showSlide(slideIdx + 1), SLIDE_MS);
   }
   function buildSlides() {
+    $('hero').hidden = !SLIDES.length;
+    if (!SLIDES.length) { clearInterval(slideTimer); return; }
     $('slides').innerHTML = SLIDES.map(({ src, caption, with: people }) => {
       // Images load lazily in showSlide() so the page doesn't fetch every photo up front.
       return `<div class="slide" data-src="${esc(encodeURI(src))}"><div class="bg"></div><img alt="${esc(caption)}">` +
