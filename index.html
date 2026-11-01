@@ -751,10 +751,10 @@
     if (!reduceMotion && SLIDES.length > 1) slideTimer = setInterval(() => showSlide(slideIdx + 1), SLIDE_MS);
   }
   function buildSlides() {
-    $('slides').innerHTML = SLIDES.map(({ src, caption }) => {
+    $('slides').innerHTML = SLIDES.map(({ src, caption, with: people }) => {
       const u = encodeURI(src);
       return `<div class="slide"><div class="bg" style="background-image:url('${u}')"></div><img src="${u}" alt="${esc(caption)}">` +
-        `<p class="caption">${esc(caption)}</p></div>`;
+        `<p class="caption">${esc(caption)}${people ? `<span class="with">👥 with ${esc(people)}</span>` : ''}</p></div>`;
     }).join('');
     $('slideDots').innerHTML = SLIDES.map((_, i) => `<button type="button" aria-label="${i + 1}번째 사진"></button>`).join('');
     $('slideDots').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => { showSlide(i); startSlides(); }));
