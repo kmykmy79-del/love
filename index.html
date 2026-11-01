@@ -885,7 +885,7 @@
       if (!out.pushed) notify('사진은 삭제했지만 GitHub에는 올리지 못했어요.\n' + (out.error || ''));
       return true;
     } catch (err) {
-      alert('사진을 삭제하지 못했어요: ' + err.message);
+      notify('사진을 삭제하지 못했어요: ' + err.message);
       return false;
     }
   }
