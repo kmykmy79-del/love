@@ -778,7 +778,9 @@
 
   // ---------- Top photo slideshow (files in images/) ----------
   // The photo list lives in images/photos.json: [{ src, date?, caption, with? }].
+  // Photos sit in images/YYYYMMDD/ folders; the local diary server rebuilds the list from them.
   let SLIDES = [];
+  const photoCaption = (s) => (s.date ? `${+s.date.slice(5, 7)}.${+s.date.slice(8)} ` : '') + (s.caption || '📷');
   async function loadSlidesData() {
     try {
       const res = await fetch('images/photos.json', { cache: 'no-store' });
