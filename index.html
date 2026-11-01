@@ -499,7 +499,8 @@
       if (photo) btn.style.backgroundImage = `url("${blobUrl(photo)}")`;
       else if (memories.length) btn.style.backgroundImage = `url("${encodeURI(memories[0].src)}")`;
       const ann = anniversary(key);
-      if (ann) btn.classList.add('anniv');
+      const bdays = birthdaysOn(key);
+      if (ann || bdays.length) btn.classList.add('anniv');
       const shown = list.slice(0, 2);
       btn.innerHTML =
         `<span class="num">${d.getDate()}</span>` +
