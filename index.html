@@ -694,7 +694,7 @@
     $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it);
     $('lbCap').textContent = lbCaps[lbIdx] || '';
     $('lbCap').hidden = !lbCaps[lbIdx]; $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
-  function openLightbox(list, i, caps = []) { lbList = list; lbIdx = i; lbCaps = caps; showLb(); $('lightbox').showModal(); }
+  function openLightbox(list, i, caps = [], deletable = false) { lbList = list; lbIdx = i; lbCaps = caps; lbDeletable = deletable; showLb(); $('lightbox').showModal(); }
   $('lbPrev').onclick = () => { lbIdx = (lbIdx - 1 + lbList.length) % lbList.length; showLb(); };
   $('lbNext').onclick = () => { lbIdx = (lbIdx + 1) % lbList.length; showLb(); };
   $('lbClose').onclick = () => $('lightbox').close();
