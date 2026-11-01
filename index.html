@@ -365,6 +365,7 @@
   function anniversary(date) {
     const n = daysTogether(date);
     if (n == null) return null;
+    if (n === 1) return '처음 만난 날';
     const s = parseYmd(settings.start), d = parseYmd(date);
     if (n > 1 && s.getMonth() === d.getMonth() && s.getDate() === d.getDate()) return `${d.getFullYear() - s.getFullYear()}주년`;
     if (n % 100 === 0) return `${n}일`;
