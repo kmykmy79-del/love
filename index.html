@@ -448,6 +448,20 @@
   function esc(s) {
     return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
+  // In-page replacements for confirm()/alert(): preview frames block those and they return at once.
+  function showMsg(message, { okLabel = '확인', cancel = false } = {}) {
+    return new Promise((resolve) => {
+      const dlg = $('msgDlg');
+      $('msgText').textContent = message;
+      $('msgOk').textContent = okLabel;
+      $('msgCancel').hidden = !cancel;
+      dlg.returnValue = '';
+      dlg.addEventListener('close', () => resolve(dlg.returnValue === 'ok'), { once: true });
+      dlg.showModal();
+    });
+  }
+  const askConfirm = (message, okLabel) => showMsg(message, { okLabel, cancel: true });
+  const notify = (message) => showMsg(message);
   const urlCache = new WeakMap();
   function blobUrl(blob) {
     if (!urlCache.has(blob)) urlCache.set(blob, URL.createObjectURL(blob));
