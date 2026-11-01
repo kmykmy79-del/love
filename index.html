@@ -467,7 +467,7 @@
     const list = entriesOn(selected);
     const box = $('entryList');
     if (!list.length) {
-      box.innerHTML = `<div class="empty">아직 기록이 없어요.<br>‘+ 추가’를 눌러 일정이나 데이트를 남겨보세요 ✍️</div>`;
+      box.innerHTML = `<div class="empty">아직 기록이 없어요.${isAdmin ? '<br>‘+ 추가’를 눌러 일정이나 데이트를 남겨보세요 ✍️' : ''}</div>`;
       return;
     }
     box.innerHTML = '';
