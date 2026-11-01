@@ -409,6 +409,7 @@
   function entriesOn(date) {
     return entries.filter((e) => e.date === date).sort((a, b) => (a.time || '99').localeCompare(b.time || '99'));
   }
+  const slidesOn = (date) => SLIDES.filter((s) => s.date === date);
   function daysTogether(date) {
     if (!settings.start) return null;
     const diff = Math.round((parseYmd(date) - parseYmd(settings.start)) / 86400000);
