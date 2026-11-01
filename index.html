@@ -805,7 +805,7 @@
       entries = await dbAll();
       $('settingsDlg').close();
       render();
-      alert('백업을 불러왔어요 💕');
+      notify('백업을 불러왔어요 💕');
     } catch (err) {
       alert('백업 파일을 읽지 못했어요: ' + err.message);
     }
