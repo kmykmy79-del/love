@@ -796,7 +796,7 @@
     try {
       const data = JSON.parse(await file.text());
       if (!Array.isArray(data.entries)) throw new Error('형식이 올바르지 않아요');
-      if (!confirm(`기록 ${data.entries.length}개를 불러올까요? 같은 기록은 덮어써요.`)) return;
+      if (!(await askConfirm(`기록 ${data.entries.length}개를 불러올까요? 같은 기록은 덮어써요.`, '불러오기'))) return;
       for (const e of data.entries) {
         e.photos = await Promise.all((e.photos || []).map(dataUrlToBlob));
         await dbPut(e);
