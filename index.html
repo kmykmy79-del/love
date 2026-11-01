@@ -960,16 +960,59 @@
   });
   applyAdmin();
 
+  // ---------- Gate (entrance screen) ----------
+  // Password = first-met day (20260704; 260704 also works). Only its SHA-256 is kept here.
+  // This hides the diary from casual visitors; the files themselves are still public on GitHub Pages.
+  const AUTH_KEY = 'couple-diary-auth';
+  const PW_HASH = 'bafdd578aaad8079651f73d09a6828e3ae6c95b75e49de3c83a527b721ec57d0';
+  async function sha256(text) {
+    const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(text));
+    return [...new Uint8Array(buf)].map((b) => b.toString(16).padStart(2, '0')).join('');
+  }
+  function isAuthed() {
+    try { return localStorage.getItem(AUTH_KEY) === PW_HASH || sessionStorage.getItem(AUTH_KEY) === PW_HASH; } catch { return false; }
+  }
+  $('gateForm').addEventListener('submit', async (ev) => {
+    ev.preventDefault();
+    let typed = $('gatePw').value.replace(/\D/g, '');
+    if (typed.length === 6) typed = '20' + typed;
+    if ((await sha256(typed)) !== PW_HASH) {
+      $('gateErr').textContent = '비밀번호가 달라요 🥲';
+      $('gatePw').select();
+      return;
+    }
+    try { ($('gateKeep').checked ? localStorage : sessionStorage).setItem(AUTH_KEY, PW_HASH); } catch {}
+    enter();
+  });
+  $('logoutBtn').onclick = async () => {
+    if (!(await askConfirm('로그아웃할까요?', '로그아웃'))) return;
+    try {
+      localStorage.removeItem(AUTH_KEY);
+      sessionStorage.removeItem(AUTH_KEY);
+      sessionStorage.removeItem(ADMIN_KEY);
+    } catch {}
+    location.reload();
+  };
+
   // ---------- Boot ----------
-  checkLocalServer()
-    .then(() => Promise.all([loadSlidesData(), loadSharedEntries()]))
-    .then(() => openDB())
-    .then(async (d) => { db = d; entries = await dbAll(); render(); })
-    .catch((err) => {
-      render();
-      console.warn(err);
-      $('entryList').insertAdjacentHTML('beforebegin', '<p class="hint" style="color:var(--sun)">브라우저 저장소를 열 수 없어서 기록이 저장되지 않을 수 있어요.</p>');
-    });
+  let booted = false;
+  function enter() {
+    document.body.classList.remove('locked');
+    if (booted) return;
+    booted = true;
+    // Photos and entries are fetched only after the gate is passed.
+    checkLocalServer()
+      .then(() => Promise.all([loadSlidesData(), loadSharedEntries()]))
+      .then(() => openDB())
+      .then(async (d) => { db = d; entries = await dbAll(); render(); })
+      .catch((err) => {
+        render();
+        console.warn(err);
+        $('entryList').insertAdjacentHTML('beforebegin', '<p class="hint" style="color:var(--sun)">브라우저 저장소를 열 수 없어서 기록이 저장되지 않을 수 있어요.</p>');
+      });
+  }
+  if (isAuthed()) enter();
+  else $('gatePw').focus();
 })();
 </script>
 </body>
