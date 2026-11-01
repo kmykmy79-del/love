@@ -687,9 +687,10 @@
   });
 
   // ---------- Lightbox ----------
-  let lbList = [], lbIdx = 0, lbCaps = [];
+  let lbList = [], lbIdx = 0, lbCaps = [], lbDeletable = false;
   function showLb() {
     const it = lbList[lbIdx];
+    $('lbDel').hidden = !lbDeletable;
     $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it);
     $('lbCap').textContent = lbCaps[lbIdx] || '';
     $('lbCap').hidden = !lbCaps[lbIdx]; $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
