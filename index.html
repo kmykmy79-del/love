@@ -543,6 +543,7 @@
         <h4>${esc(e.title)}</h4>
         ${e.place || e.address ? `<p class="place">📍 ${esc(e.place || e.address)}${e.place && e.address ? ` <span class="time">· ${esc(e.address)}</span>` : ''}
           <a href="https://map.naver.com/p/search/${encodeURIComponent(where)}" target="_blank" rel="noopener">지도 보기 ↗</a></p>` : ''}
+        ${e.with ? `<p class="place">👥 with ${esc(e.with)}</p>` : ''}
         ${e.memo ? `<p class="memo">${esc(e.memo)}</p>` : ''}
         ${e.photos?.length ? `<div class="photos">${e.photos.map((ph, i) => `<img src="${blobUrl(ph)}" data-i="${i}" alt="사진 ${i + 1}" loading="lazy">`).join('')}</div>` : ''}
         <div class="entry-actions admin-only">
