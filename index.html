@@ -708,6 +708,48 @@
     }
   });
 
+  // ---------- Top photo slideshow (files in images/) ----------
+  const SLIDES = [
+    'images/KakaoTalk_20261025_175750202_00.jpg',
+    'images/KakaoTalk_20261023_221439782_00 (1).jpg',
+  ];
+  const SLIDE_MS = 4000;
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let slideIdx = 0, slideTimer = null;
+  function showSlide(i) {
+    slideIdx = (i + SLIDES.length) % SLIDES.length;
+    $('slides').querySelectorAll('.slide').forEach((s, k) => s.classList.toggle('active', k === slideIdx));
+    $('slideDots').querySelectorAll('button').forEach((d, k) => d.setAttribute('aria-current', k === slideIdx));
+  }
+  function startSlides() {
+    clearInterval(slideTimer);
+    if (!reduceMotion && SLIDES.length > 1) slideTimer = setInterval(() => showSlide(slideIdx + 1), SLIDE_MS);
+  }
+  function buildSlides() {
+    $('slides').innerHTML = SLIDES.map((src, i) => {
+      const u = encodeURI(src);
+      return `<div class="slide"><div class="bg" style="background-image:url('${u}')"></div><img src="${u}" alt="우리 사진 ${i + 1}"></div>`;
+    }).join('');
+    $('slideDots').innerHTML = SLIDES.map((_, i) => `<button type="button" aria-label="${i + 1}번째 사진"></button>`).join('');
+    $('slideDots').querySelectorAll('button').forEach((b, i) => b.addEventListener('click', () => { showSlide(i); startSlides(); }));
+    $('slidePrev').hidden = $('slideNext').hidden = $('slideDots').hidden = SLIDES.length < 2;
+    showSlide(0);
+    startSlides();
+  }
+  $('slidePrev').onclick = () => { showSlide(slideIdx - 1); startSlides(); };
+  $('slideNext').onclick = () => { showSlide(slideIdx + 1); startSlides(); };
+  $('hero').addEventListener('mouseenter', () => clearInterval(slideTimer));
+  $('hero').addEventListener('mouseleave', startSlides);
+  let touchX = null;
+  $('slides').addEventListener('touchstart', (e) => { touchX = e.touches[0].clientX; }, { passive: true });
+  $('slides').addEventListener('touchend', (e) => {
+    if (touchX == null) return;
+    const dx = e.changedTouches[0].clientX - touchX;
+    touchX = null;
+    if (Math.abs(dx) > 40) { showSlide(slideIdx + (dx < 0 ? 1 : -1)); startSlides(); }
+  });
+  buildSlides();
+
   // ---------- Admin lock (password = first-met day, e.g. 20260704) ----------
   function applyAdmin() {
     document.body.classList.toggle('is-admin', isAdmin);
