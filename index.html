@@ -100,9 +100,14 @@
   /* Calendar */
   .cal { padding: 16px; }
   .cal-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
-  .cal-top h2 { margin: 0; font-size: 1.3rem; }
+  .cal-top h2 { margin: 0; font-size: 1.3rem; white-space: nowrap; }
   .nav { display: flex; gap: 6px; }
-  .nav button { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 12px; }
+  .nav button { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 12px; white-space: nowrap; }
+  @media (max-width: 600px) {
+    .cal-top h2 { font-size: 1.1rem; }
+    .nav { gap: 4px; }
+    .nav button { padding: 4px 9px; }
+  }
   .nav button:hover { border-color: var(--accent); color: var(--accent); }
   .grid { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
   .dow { text-align: center; font-size: .8rem; color: var(--muted); padding: 4px 0; }
