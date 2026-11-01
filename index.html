@@ -475,6 +475,7 @@
       const key = ymd(d);
       const list = entriesOn(key);
       const photo = list.flatMap((e) => e.photos || [])[0];
+      const memories = slidesOn(key);
       const btn = document.createElement('button');
       btn.type = 'button';
       btn.className = 'day' +
