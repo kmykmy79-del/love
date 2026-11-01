@@ -483,8 +483,9 @@
         (d.getDay() === 0 ? ' sun' : d.getDay() === 6 ? ' sat' : '') +
         (key === todayStr ? ' today' : '') +
         (key === selected ? ' selected' : '') +
-        (photo ? ' has-photo' : '');
+        (photo || memories.length ? ' has-photo' : '');
       if (photo) btn.style.backgroundImage = `url("${blobUrl(photo)}")`;
+      else if (memories.length) btn.style.backgroundImage = `url("${encodeURI(memories[0].src)}")`;
       const ann = anniversary(key);
       if (ann) btn.classList.add('anniv');
       const shown = list.slice(0, 2);
