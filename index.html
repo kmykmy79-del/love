@@ -484,15 +484,24 @@
     return String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
   }
   // In-page replacements for confirm()/alert(): preview frames block those and they return at once.
+  // Resolves from the button clicks themselves (not the dialog's 'close' event, which can be delayed or skipped).
   function showMsg(message, { okLabel = '확인', cancel = false } = {}) {
     return new Promise((resolve) => {
       const dlg = $('msgDlg');
+      const finish = (ok) => (ev) => {
+        ev.preventDefault();
+        $('msgOk').onclick = $('msgCancel').onclick = dlg.oncancel = null;
+        dlg.close();
+        resolve(ok);
+      };
       $('msgText').textContent = message;
       $('msgOk').textContent = okLabel;
       $('msgCancel').hidden = !cancel;
-      dlg.returnValue = '';
-      dlg.addEventListener('close', () => resolve(dlg.returnValue === 'ok'), { once: true });
+      $('msgOk').onclick = finish(true);
+      $('msgCancel').onclick = finish(false);
+      dlg.oncancel = finish(false); // Esc key
       dlg.showModal();
+      $('msgOk').focus();
     });
   }
   const askConfirm = (message, okLabel) => showMsg(message, { okLabel, cancel: true });
