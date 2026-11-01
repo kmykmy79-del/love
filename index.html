@@ -345,6 +345,9 @@
   const today = new Date();
   let viewY = today.getFullYear(), viewM = today.getMonth();
   let selected = ymd(today);
+  const ADMIN_KEY = 'couple-diary-admin';
+  let isAdmin = false;
+  try { isAdmin = sessionStorage.getItem(ADMIN_KEY) === '1'; } catch {}
 
   // ---------- Helpers ----------
   function ymd(d) {
