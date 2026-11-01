@@ -674,8 +674,6 @@
     $('fPlace').value = entry?.place || '';
     $('fAddress').value = entry?.address || '';
     $('fMemo').value = entry?.memo || '';
-    draftPhotos = [...(entry?.photos || [])];
-    renderDraftThumbs();
     syncTypeUI();
     $('entryDlg').showModal();
     $('fTitle').focus();
