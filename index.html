@@ -559,7 +559,7 @@
     // Up to 2 photos: full cards with captions. More: a thumbnail grid (captions show in the viewer).
     box.innerHTML = mem.length > 2
       ? `<div class="photos memory-grid">${mem.map((s, i) =>
-          `<img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}" loading="lazy">`).join('')}</div>` +
+          `<img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(photoCaption(s))}" loading="lazy">`).join('')}</div>` +
         `<p class="hint">📷 사진 ${mem.length}장 · 눌러서 크게 보기</p>`
       : mem.map((s, i) =>
           `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}` +
