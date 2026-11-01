@@ -516,12 +516,16 @@
       ? `<p class="hint" style="color:var(--accent);font-weight:700">💕 ${selected === ymd(today) ? '오늘은' : '이날은'} 우리의 ${ann}이에요!</p>`
       : n ? `<p class="hint">함께한 지 ${n.toLocaleString()}일째</p>` : '';
     const list = entriesOn(selected);
+    const mem = slidesOn(selected);
     const box = $('entryList');
+    box.innerHTML = mem.map((s, i) =>
+      `<figure class="memory"><img src="${encodeURI(s.src)}" data-i="${i}" alt="${esc(s.caption)}"><figcaption>${esc(s.caption)}</figcaption></figure>`).join('');
+    box.querySelectorAll('.memory img').forEach((img) =>
+      img.addEventListener('click', () => openLightbox(mem.map((s) => s.src), Number(img.dataset.i))));
     if (!list.length) {
-      box.innerHTML = `<div class="empty">아직 기록이 없어요.${isAdmin ? '<br>‘+ 추가’를 눌러 일정이나 데이트를 남겨보세요 ✍️' : ''}</div>`;
+      if (!mem.length) box.innerHTML = `<div class="empty">아직 기록이 없어요.${isAdmin ? '<br>‘+ 추가’를 눌러 일정이나 데이트를 남겨보세요 ✍️' : ''}</div>`;
       return;
     }
-    box.innerHTML = '';
     for (const e of list) {
       const el = document.createElement('article');
       el.className = 'entry';
