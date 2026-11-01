@@ -650,7 +650,9 @@
 
   // ---------- Lightbox ----------
   let lbList = [], lbIdx = 0;
-  function showLb() { $('lbImg').src = blobUrl(lbList[lbIdx]); $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
+  function showLb() {
+    const it = lbList[lbIdx];
+    $('lbImg').src = typeof it === 'string' ? encodeURI(it) : blobUrl(it); $('lbPrev').hidden = $('lbNext').hidden = lbList.length < 2; }
   function openLightbox(list, i) { lbList = list; lbIdx = i; showLb(); $('lightbox').showModal(); }
   $('lbPrev').onclick = () => { lbIdx = (lbIdx - 1 + lbList.length) % lbList.length; showLb(); };
   $('lbNext').onclick = () => { lbIdx = (lbIdx + 1) % lbList.length; showLb(); };
