@@ -431,6 +431,7 @@
         (photo ? ' has-photo' : '');
       if (photo) btn.style.backgroundImage = `url("${blobUrl(photo)}")`;
       const ann = anniversary(key);
+      if (ann) btn.classList.add('anniv');
       const shown = list.slice(0, 2);
       btn.innerHTML =
         `<span class="num">${d.getDate()}</span>` +
