@@ -61,6 +61,10 @@
   }
   .icon-btn:hover { border-color: var(--accent); }
 
+  /* Admin lock */
+  body:not(.is-admin) .admin-only { display: none !important; }
+  .pw-error { color: var(--sun); font-size: .85rem; min-height: 1.3em; margin: 2px 0 0; }
+
   /* Hero photo */
   .hero { margin: 0 0 18px; padding: 10px; }
   .hero img { display: block; width: 100%; height: auto; border-radius: 12px; }
