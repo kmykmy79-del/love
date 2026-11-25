@@ -131,10 +131,13 @@
   .cal { padding: 16px; }
   .cal-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; gap: 8px; }
   .cal-top h2 { margin: 0; font-size: 1.3rem; white-space: nowrap; }
+  .cal-title { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .cal-chars { height: 44px; width: auto; flex: none; filter: drop-shadow(0 2px 4px rgba(0,0,0,.35)); }
   .nav { display: flex; gap: 6px; }
   .nav button { border: 1px solid var(--line); background: var(--surface); border-radius: 10px; padding: 4px 12px; white-space: nowrap; }
   @media (max-width: 600px) {
     .cal-top h2 { font-size: 1.1rem; }
+    .cal-chars { height: 34px; }
     .nav { gap: 4px; }
     .nav button { padding: 4px 9px; }
   }
@@ -291,7 +294,10 @@
   <div class="layout">
     <section class="card cal">
       <div class="cal-top">
-        <h2 id="monthLabel"></h2>
+        <div class="cal-title">
+          <h2 id="monthLabel"></h2>
+          <img class="cal-chars" src="assets/characters.png" alt="찹쌀떡과 슬라임" width="300" height="155">
+        </div>
         <div class="nav">
           <button id="prevYearBtn" aria-label="이전 해" title="이전 해">«</button>
           <button id="prevBtn" aria-label="이전 달" title="이전 달">‹</button>
